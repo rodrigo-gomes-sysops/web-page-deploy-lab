@@ -1,45 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-test
-  labels:
-    app: nginx-test
+  name: webpage
 spec:
   replicas: 1
-  revisionHistoryLimit: 1
   selector:
     matchLabels:
-      app: nginx-test
+      app: webpage
   template:
     metadata:
       labels:
-        app: nginx-test
+        app: webpage
     spec:
       containers:
-      - name: nginx
-        image: nginx:1.27
-        imagePullPolicy: IfNotPresent
+      - name: webpage
+        image: fabricioveronez/pagina-exemplo:blue
         ports:
         - containerPort: 80
-        resources:
-          requests:
-            cpu: "50m"
-            memory: "64Mi"
-          limits:
-            cpu: "100m"
-            memory: "128Mi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-test
-  labels:
-    app: nginx-test
+  name: webpage
 spec:
-  type: ClusterIP
   selector:
-    app: nginx-test
+    app: webpage
   ports:
-  - name: http
-    port: 80
+  - port: 80
     targetPort: 80
+  type: LoadBalancer
